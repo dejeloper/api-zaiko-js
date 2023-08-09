@@ -1,4 +1,6 @@
 import express, { json } from "express";
+import cors from "cors";
+import { option } from "./src/middlewares/config/cors.js";
 import {
   boomErrorHandler,
   errorHandler,
@@ -10,6 +12,8 @@ const app = express();
 const port = 3000;
 
 app.use(json());
+
+app.use(cors(option));
 
 app.get("/", (req, res) => {
   res.send("Api backend Zaiko");
