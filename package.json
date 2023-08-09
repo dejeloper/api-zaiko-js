@@ -1,0 +1,35 @@
+{
+  "name": "api-zaiko",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@hapi/boom": "10.0.1",
+    "cors": "2.8.5",
+    "dotenv": "16.3.1",
+    "express": "4.18.2",
+    "joi": "17.9.2",
+    "pg": "8.11.1",
+    "pg-hstore": "2.3.4",
+    "sequelize": "6.32.1"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "8.0.2",
+    "eslint": "8.44.0",
+    "eslint-config-prettier": "8.8.0",
+    "eslint-config-standard": "17.1.0",
+    "eslint-plugin-import": "2.27.5",
+    "eslint-plugin-n": "16.0.1",
+    "eslint-plugin-prettier": "4.2.1",
+    "eslint-plugin-promise": "6.1.1",
+    "nodemon": "2.0.22",
+    "prettier": "2.8.8"
+  }
+}
