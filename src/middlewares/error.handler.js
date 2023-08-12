@@ -1,18 +1,18 @@
-import { ValidationError } from "sequelize";
+const { ValidationError, DatabaseError } = require("sequelize");
 
-export const logErrors = (err, req, res, next) => {
-  // console.error(err);
+function logErrors(err, req, res, next) {
+  console.error(err);
   next(err);
-};
+}
 
-export const errorHandler = (err, req, res, next) => {
+function errorHandler(err, req, res, next) {
   res.status(500).json({
     message: err.message,
-    // stack: err.stack,
+    stack: err.stack,
   });
-};
+}
 
-export const boomErrorHandler = (err, req, res, next) => {
+function boomErrorHandler(err, req, res, next) {
   if (err.isBoom) {
     const { output } = err;
     const { payload, statusCode } = output;
@@ -22,12 +22,24 @@ export const boomErrorHandler = (err, req, res, next) => {
       message: payload.message,
       count: 0,
     });
+  } else {
+    next(err);
   }
-  next(err);
-};
+}
 
-export const ormErrorHandler = (err, req, res, next) => {
-  if (err instanceof ValidationError) {
+function ormErrorHandler(err, req, res, next) {
+  if (err instanceof DatabaseError) {
+    res.status(500).json({
+      success: false,
+      data: [],
+      message: {
+        name: err.name,
+        errors: err,
+        msg: "Error de base de datos",
+      },
+      count: 0,
+    });
+  } else if (err instanceof ValidationError) {
     res.status(409).json({
       success: false,
       data: [],
@@ -37,7 +49,9 @@ export const ormErrorHandler = (err, req, res, next) => {
       },
       count: 0,
     });
+  } else {
+    next(err);
   }
+}
 
-  next(err);
-};
+module.exports = { logErrors, errorHandler, boomErrorHandler, ormErrorHandler };

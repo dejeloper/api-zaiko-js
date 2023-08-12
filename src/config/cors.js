@@ -4,7 +4,7 @@ const whitelist = [
   "https://backend-zaiko.vercel.app",
 ];
 
-export const option = {
+const option = {
   origin: (origin, callback) => {
     if (whitelist.includes(origin) || !origin) {
       callback(null, true);
@@ -13,3 +13,5 @@ export const option = {
     }
   },
 };
+
+module.exports = { option };
