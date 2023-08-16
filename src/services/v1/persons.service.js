@@ -1,6 +1,7 @@
 const boom = require("@hapi/boom");
 const pool = require("../../libs/postgres");
 const sequelize = require("../../libs/sequelize");
+const { Persons } = require("../../db/models/Persons.model");
 
 class PersonsService {
   constructor() {
@@ -8,6 +9,16 @@ class PersonsService {
     this.pool.on("error", (err) =>
       console.error("Error en el pool de conexión: ", err)
     );
+  }
+
+  async createPerson(paramsNewPersons) {
+    try {
+      const newPerson = await Persons.create(paramsNewPersons);
+
+      return newPerson;
+    } catch (error) {
+      throw boom.badGateway(error);
+    }
   }
 
   async getAllPersonsEnabled() {
