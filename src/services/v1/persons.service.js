@@ -27,9 +27,44 @@ class PersonsService {
       const [data] = await sequelize.query(query);
       const persons = data;
 
-      if (persons.length <= 0) throw boom.notFound("Persons not found");
+      if (persons.length <= 0) throw boom.notFound("Personas no encontradas");
 
       return persons;
+    } catch (error) {
+      throw boom.badGateway(error);
+    }
+  }
+
+  async getPersonsById(id) {
+    try {
+      const person = await Persons.findByPk(id);
+
+      if (person === null) throw boom.notFound("Persona no encontrada");
+
+      return person;
+    } catch (error) {
+      throw boom.badGateway(error);
+    }
+  }
+
+  async updatePerson(id, paramsUpdatePerson) {
+    try {
+      const person = await Persons.findByPk(id);
+
+      if (person === null) throw boom.notFound("Persona no encontrada");
+      const [numUpdatedRows, updatedPersons] = await Persons.update(
+        paramsUpdatePerson,
+        {
+          where: {
+            Id: id,
+          },
+          returning: true,
+        }
+      );
+
+      if (numUpdatedRows === 0) throw boom.notFound("Persona no actualizada");
+
+      return updatedPersons;
     } catch (error) {
       throw boom.badGateway(error);
     }
