@@ -4,9 +4,9 @@ const PersonsService = require("../../../services/v1/persons.service");
 const router = express.Router();
 const service = new PersonsService();
 
-router.get("/", async (req, res, next) => {
+router.get("/getAllPersonsEnabled/", async (req, res, next) => {
   try {
-    const persons = await service.find();
+    const persons = await service.getAllPersonsEnabled();
     res.json(persons);
   } catch (error) {
     next(error);

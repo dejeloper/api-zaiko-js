@@ -10,7 +10,7 @@ class PersonsService {
     );
   }
 
-  async find() {
+  async getAllPersonsEnabled() {
     try {
       const query = `SELECT * FROM public.getAllPersonsEnabled();`;
       const [data] = await sequelize.query(query);
