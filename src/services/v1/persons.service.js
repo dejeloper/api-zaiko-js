@@ -29,12 +29,7 @@ class PersonsService {
 
       if (persons.length <= 0) throw boom.notFound("Persons not found");
 
-      return {
-        success: true,
-        data: persons,
-        message: "Ok",
-        count: persons.length,
-      };
+      return persons;
     } catch (error) {
       throw boom.badGateway(error);
     }

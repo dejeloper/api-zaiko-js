@@ -35,7 +35,7 @@ app.listen(port, () => {
 
 async function main() {
   try {
-    await sequelize.sync({ force: false });
+    await sequelize.sync({ force: true });
   } catch (error) {
     console.log(error);
   }

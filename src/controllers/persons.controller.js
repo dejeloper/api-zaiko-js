@@ -42,7 +42,15 @@ async function createPerson(req, res, next) {
 async function getAllPersonsEnabled(req, res, next) {
   try {
     const persons = await service.getAllPersonsEnabled();
-    res.json(persons);
+
+    const responsePersons = {
+      success: true,
+      data: persons,
+      message: "Ok",
+      count: persons.length,
+    };
+
+    res.status(200).json(responsePersons);
   } catch (error) {
     next(error);
   }
