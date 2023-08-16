@@ -13,6 +13,14 @@ class PersonsService {
 
   async createPerson(paramsNewPersons) {
     try {
+      const person = await Persons.findOne({
+        where: {
+          DocumentNumber: paramsNewPersons.DocumentNumber,
+        },
+      });
+
+      if (person !== null) throw boom.notFound("Persona ya existe");
+
       const newPerson = await Persons.create(paramsNewPersons);
 
       return newPerson;
