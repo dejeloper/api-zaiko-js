@@ -124,11 +124,11 @@ async function deletePerson(req, res, next) {
       DateUpdate: new Date(),
     };
 
-    const deletePersons = await service.updatePerson(id, paramsDeletePersons);
+    await service.updatePerson(id, paramsDeletePersons);
 
     const responsePersons = {
       success: true,
-      data: deletePersons,
+      data: id,
       message: "Persona eliminada correctamente",
       count: 1,
     };
