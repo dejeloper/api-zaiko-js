@@ -14,7 +14,7 @@ router.post("/", createPerson);
 router.get("/", getAllPersonsEnabled);
 router.get("/getAllPersonsEnabled/", getAllPersonsEnabled);
 router.get("/:id", getPersonsById);
-router.put("/:id", updatePerson);
+router.patch("/:id", updatePerson);
 router.delete("/:id", deletePerson);
 
 module.exports = router;
