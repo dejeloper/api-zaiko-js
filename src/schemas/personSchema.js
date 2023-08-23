@@ -57,15 +57,39 @@ const personSchema = z.object({
     .positive()
     .min(1001, { message: "El estado debe ser mayor o igual a 1001" })
     .max(1003, { message: "El estado debe ser menor o igual a 1003" }),
-  UserCreated: z.string().min(1).max(50),
+  UserCreated: z
+    .string()
+    .min(4, {
+      message: "El Usuario de Creación debe tener al menos 4 caracter",
+    })
+    .max(50, {
+      message: "El Usuario de Creación debe tener máximo 50 caracteres",
+    })
+    .optional(),
+  UserUpdate: z
+    .string()
+    .min(4, {
+      message: "El Usuario de Actualización debe tener al menos 4 caracter",
+    })
+    .max(50, {
+      message: "El Usuario de Actualización debe tener máximo 50 caracteres",
+    })
+    .optional(),
 });
 
-function validatePerson(person) {
-  person.DateBirthday = new Date(person.DateBirthday);
+function validateCreatePerson(person) {
+  if (person.DateBirthday) person.DateBirthday = new Date(person.DateBirthday);
 
   return personSchema.safeParse(person);
 }
 
+function validatePartialPerson(person) {
+  if (person.DateBirthday) person.DateBirthday = new Date(person.DateBirthday);
+
+  return personSchema.partial().safeParse(person);
+}
+
 module.exports = {
-  validatePerson,
+  validateCreatePerson,
+  validatePartialPerson,
 };
