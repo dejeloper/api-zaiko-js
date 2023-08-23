@@ -1,27 +1,23 @@
-const PersonsService = require("../services/v1/persons.service");
+const boom = require("@hapi/boom");
 
+const {
+  validateCreatePerson,
+  validatePartialPerson,
+} = require("../schemas/personSchema");
+const PersonsService = require("../services/v1/persons.service");
+const { generateErrorMessage } = require("../schemas/utils/getStringErrors");
 const service = new PersonsService();
 
 async function createPerson(req, res, next) {
   try {
-    const {
-      Name,
-      LastName,
-      DocumentType,
-      DocumentNumber,
-      DateBirthday,
-      State,
-      UserCreated,
-    } = req.body;
+    const resValidateCreatePerson = validateCreatePerson(req.body);
+    if (resValidateCreatePerson.error) {
+      const errorObj = generateErrorMessage(resValidateCreatePerson);
+      throw boom.badData(errorObj);
+    }
 
     const paramsNewPersons = {
-      Name,
-      LastName,
-      DocumentType,
-      DocumentNumber,
-      DateBirthday,
-      State,
-      UserCreated,
+      ...resValidateCreatePerson.data,
     };
 
     const newPerson = await service.createPerson(paramsNewPersons);
@@ -76,25 +72,17 @@ async function getPersonsById(req, res, next) {
 
 async function updatePerson(req, res, next) {
   try {
+    const resValidatePartialPerson = validatePartialPerson(req.body);
+
+    if (resValidatePartialPerson.error) {
+      const errorObj = generateErrorMessage(resValidatePartialPerson);
+      throw boom.badData(errorObj);
+    }
+
     const { id } = req.params;
-    const {
-      Name,
-      LastName,
-      DocumentType,
-      DocumentNumber,
-      DateBirthday,
-      State,
-      UserUpdate,
-    } = req.body;
 
     const paramsUpdatePersons = {
-      ...(Name && { Name }),
-      ...(LastName && { LastName }),
-      ...(DocumentType && { DocumentType }),
-      ...(DocumentNumber && { DocumentNumber }),
-      ...(DateBirthday && { DateBirthday }),
-      ...(State && { State }),
-      ...(UserUpdate && { UserUpdate }),
+      ...resValidatePartialPerson.data,
       DateUpdate: new Date(),
     };
 
@@ -115,11 +103,17 @@ async function updatePerson(req, res, next) {
 
 async function deletePerson(req, res, next) {
   try {
+    const resValidatePartialPerson = validatePartialPerson(req.body);
+
+    if (resValidatePartialPerson.error) {
+      const errorObj = generateErrorMessage(resValidatePartialPerson);
+      throw boom.badData(errorObj);
+    }
+
     const { id } = req.params;
-    const { UserUpdate } = req.body;
 
     const paramsDeletePersons = {
-      ...(UserUpdate && { UserUpdate }),
+      ...resValidatePartialPerson.data,
       Enabled: false,
       DateUpdate: new Date(),
     };
