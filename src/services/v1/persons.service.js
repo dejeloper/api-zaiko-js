@@ -1,6 +1,5 @@
 const boom = require("@hapi/boom");
 const pool = require("../../libs/postgres");
-const sequelize = require("../../libs/sequelize");
 const { Persons } = require("../../db/models/Persons.model");
 
 class PersonsService {
@@ -31,9 +30,11 @@ class PersonsService {
 
   async getAllPersonsEnabled() {
     try {
-      const query = `SELECT * FROM public.getAllPersonsEnabled();`;
-      const [data] = await sequelize.query(query);
-      const persons = data;
+      const persons = await Persons.findAll({
+        where: {
+          Enabled: true,
+        },
+      });
 
       if (persons.length <= 0) throw boom.notFound("Personas no encontradas");
 
@@ -43,9 +44,14 @@ class PersonsService {
     }
   }
 
-  async getPersonsById(id) {
+  async getPersonsById(Id) {
     try {
-      const person = await Persons.findByPk(id);
+      const person = await Persons.findOne({
+        where: {
+          Id,
+          Enabled: true,
+        },
+      });
 
       if (person === null) throw boom.notFound("Persona no encontrada");
 
@@ -55,16 +61,22 @@ class PersonsService {
     }
   }
 
-  async updatePerson(id, paramsUpdatePerson) {
+  async updatePerson(Id, paramsUpdatePerson) {
     try {
-      const person = await Persons.findByPk(id);
+      const person = await Persons.findOne({
+        where: {
+          Id,
+          Enabled: true,
+        },
+      });
 
       if (person === null) throw boom.notFound("Persona no encontrada");
+
       const [numUpdatedRows, updatedPersons] = await Persons.update(
         paramsUpdatePerson,
         {
           where: {
-            Id: id,
+            Id,
           },
           returning: true,
         }
