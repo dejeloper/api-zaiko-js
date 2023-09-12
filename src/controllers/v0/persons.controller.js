@@ -3,9 +3,9 @@ const boom = require("@hapi/boom");
 const {
   validateCreatePerson,
   validatePartialPerson,
-} = require("../schemas/personSchema");
-const PersonsService = require("../services/v1/persons.service");
-const { generateErrorMessage } = require("../schemas/utils/getStringErrors");
+} = require("../../schemas/personSchema");
+const PersonsService = require("../../services/v0/persons.service");
+const { generateErrorMessage } = require("../../schemas/utils/getStringErrors");
 const service = new PersonsService();
 
 async function createPerson(req, res, next) {

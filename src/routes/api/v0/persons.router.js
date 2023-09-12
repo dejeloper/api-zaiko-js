@@ -6,7 +6,7 @@ const {
   updatePerson,
   deletePerson,
   getPersonsById,
-} = require("../../../controllers/persons.controller");
+} = require("../../../controllers/v0/persons.controller");
 
 const router = express.Router();
 

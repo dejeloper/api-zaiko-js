@@ -18,13 +18,14 @@ class PersonsService {
         },
       });
 
-      if (person !== null) throw boom.notFound("Persona ya existe");
+      if (person !== null) throw boom.conflict("Persona ya existe");
 
       const newPerson = await Persons.create(paramsNewPersons);
 
       return newPerson;
     } catch (error) {
-      throw boom.badGateway(error);
+      if (error.output.statusCode === 409) throw error;
+      else throw boom.badGateway("Error al crear persona");
     }
   }
 
@@ -40,7 +41,8 @@ class PersonsService {
 
       return persons;
     } catch (error) {
-      throw boom.badGateway(error);
+      if (error.output.statusCode === 404) throw error;
+      else throw boom.badGateway("Error al consultar personas");
     }
   }
 
@@ -57,7 +59,8 @@ class PersonsService {
 
       return person;
     } catch (error) {
-      throw boom.badGateway(error);
+      if (error.output.statusCode === 404) throw error;
+      else throw boom.badGateway("Error al consultar personas");
     }
   }
 
@@ -82,11 +85,13 @@ class PersonsService {
         }
       );
 
-      if (numUpdatedRows === 0) throw boom.notFound("Persona no actualizada");
+      if (numUpdatedRows === 0) throw boom.badData("Persona no actualizada");
 
       return updatedPersons;
     } catch (error) {
-      throw boom.badGateway(error);
+      if (error.output.statusCode === 404) throw error;
+      else if (error.output.statusCode === 422) throw error;
+      else throw boom.badGateway("Error al consultar personas");
     }
   }
 }
